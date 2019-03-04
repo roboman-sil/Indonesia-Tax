@@ -2,8 +2,13 @@ const relief = require("./relief/relief");
 const taxation = require("./tax/taxation");
 
 function calculator(incomeType, amount, status) {
-  let annualIncome = amount;
-  if (incomeType === "Monthly") annualIncome = amount * 12;
+  let income = amount;
+  if (typeof amount === "string") {
+    income = Number.parseInt(income);
+  }
+
+  let annualIncome = income;
+  if (incomeType === "Monthly") annualIncome = income * 12;
 
   const taxRelief = relief(status);
 

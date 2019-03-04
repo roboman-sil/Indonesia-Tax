@@ -16,6 +16,13 @@ describe("Calculator", () => {
     expect(annual).toHaveProperty("Annual Income", 5);
     expect(monthly).toHaveProperty("Annual Income", 60);
   });
+  it("should be able to parse input as numbers", () => {
+    const annual = calculator("Annual", "10");
+    const monthly = calculator("Monthly", "10");
+
+    expect(annual).toHaveProperty("Annual Income", 10);
+    expect(monthly).toHaveProperty("Annual Income", 120);
+  });
 
   describe("Overall Test", () => {
     it("should be able to calculate correctly base on input (1)", () => {
