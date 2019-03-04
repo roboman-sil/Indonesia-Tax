@@ -16,4 +16,26 @@ describe("Calculator", () => {
     expect(annual).toHaveProperty("Annual Income", 5);
     expect(monthly).toHaveProperty("Annual Income", 60);
   });
+
+  it("should be able to calculate correctly", () => {
+    const result = calculator("Monthly", 6500000, "K1");
+
+    expect(result).toEqual({
+      "Annual Income": 78000000,
+      "Tax Relief": 63000000,
+      "Annual Taxable Income": 15000000,
+      "Annual Income Tax": 750000
+    });
+  });
+
+  it("should be able to calculate correctly", () => {
+    const result = calculator("Monthly", 25000000, "TK0");
+
+    expect(result).toEqual({
+      "Annual Income": 300000000,
+      "Tax Relief": 54000000,
+      "Annual Taxable Income": 246000000,
+      "Annual Income Tax": 31900000
+    });
+  });
 });
