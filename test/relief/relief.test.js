@@ -26,4 +26,10 @@ describe("Relief", () => {
 
     expect(result).toBe(72000000);
   });
+
+  it("should return zero when status does not match", () => {
+    const result = relief("ze");
+
+    expect(result).toBe(0);
+  });
 });
