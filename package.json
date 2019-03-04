@@ -1,0 +1,30 @@
+{
+  "name": "indonesia-tax",
+  "version": "1.0.0",
+  "description": "For a test",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Silavin/Indonesia-Tax.git"
+  },
+  "author": "Sebastian Sim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Silavin/Indonesia-Tax/issues"
+  },
+  "homepage": "https://github.com/Silavin/Indonesia-Tax#readme",
+  "dependencies": {
+    "dotenv": "^6.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.15.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "jest": "^24.1.0"
+  }
+}
