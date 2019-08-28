@@ -1,0 +1,112 @@
+<template>
+  <basic-page-layout sheetStyle="sheet-border pa-0 mb-12 mt-12">
+    <div
+      id="canvas-container"
+      class="width-full"
+    >
+      <canvas id="the-canvas"></canvas>
+      <snack-bar
+        ref="snackbar"
+        :message.sync="snackBar.message"
+        :is-visible.sync="snackBar.isDisplayed"
+      />
+    </div>
+
+  </basic-page-layout>
+</template>
+
+<script>
+import BasicPageLayout from '@/components/BasicPageLayout.vue'
+import SnackBar from '@/components/SnackBar.vue'
+import pdfjsLib from 'pdfjs-dist/webpack.js'
+
+import { mapActions } from 'vuex'
+
+export default {
+	name: 'ETicket',
+	components: {
+		BasicPageLayout, SnackBar
+	},
+	props: {
+		ticketNo: { type: String, required: true },
+		receiptNo: { type: String, required: true }
+	},
+	data () {
+		return ({
+			snackBar: {
+				message: '',
+				isDisplayed: false,
+				loadingTask: null
+			}
+		})
+	},
+	created () {
+		this.viewTicketPdf()
+	},
+	methods: {
+		...mapActions(['getTicketPdf', 'setLoader']),
+		viewTicketPdf () {
+			this.setLoader(true)
+
+			const { ticketNo, receiptNo } = this
+			this.getTicketPdf({ ticketNo, receiptNo }).then((data) => {
+				switch (data != null) {
+				case true:
+					this.initializeFile(data)
+					this.refreshViewport()
+					window.onresize = this.refreshViewport
+					break
+				case false:
+					this.$refs.snackbar.setSnackBar(true, 'Error! Unable to load ticket file')
+					break
+				}
+			}).finally(() => {
+				this.setLoader(false)
+			})
+		},
+		initializeFile (blob) {
+			const file = new Blob([blob], { type: 'application/pdf' })
+			const fileURL = URL.createObjectURL(file)
+
+			this.loadingTask = pdfjsLib.getDocument(fileURL)
+		},
+		refreshViewport () {
+			this.loadingTask.promise.then(function (pdf) {
+				pdf.getPage(1).then(function (page) {
+					const container = document.getElementById('canvas-container')
+					const containerWidth = container.clientWidth
+
+					const canvas = document.getElementById('the-canvas')
+					const context = canvas.getContext('2d')
+					canvas.width = containerWidth
+
+					const viewport = page.getViewport(canvas.width / page.getViewport(1).width)
+					canvas.height = viewport.height
+
+					var renderContext = {
+						canvasContext: context,
+						viewport: viewport
+					}
+					page.render(renderContext)
+				})
+			})
+		}
+	}
+}
+</script>
+
+
+<style lang="scss" scoped>
+.test {
+  // display: flex;
+  // justify-content: center;
+  // min-height: '-webkit-fill-available';
+  height: 100%;
+}
+#the-canvas {
+  max-width: 100%;
+}
+.overflow {
+  overflow: auto;
+}
+</style>
